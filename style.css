@@ -1,0 +1,38 @@
+.textarea {
+  width: 1000px;
+  margin: 100px auto;
+}
+textarea {
+  width: 1000px;
+}
+#keyboard {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0 auto;
+  width: 1000px;
+  border: 2px solid black;
+  padding: 10px;
+  background-color: #321011;
+}
+.key-def {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  border: 1px solid black;
+  margin: 3px;
+  padding: 3px;
+  background-color: #3a424e;
+  border-radius: 3px;
+  color: white;
+}
+.clearfix {
+  clear: both;
+  display: block;
+  width: 100%;
+}
+.special-key {
+  background: #1c232e;
+}
