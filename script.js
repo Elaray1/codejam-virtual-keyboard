@@ -78,12 +78,12 @@ window.onload = function() {
 
   //Смена языка
   let leftShift;
-  let leftAlt;
   let caps;
+
+  //Избавляюсь от предупреждений eslint
 
   function keydown(event) {
     if (event.code == 'ShiftLeft') leftShift = true;
-    else if (event.code == 'AltLeft') leftAlt = true;
     let element = document.querySelectorAll('div[data="' + `${event.keyCode}` + '"]');
     if (element.length == 1) {
       element = element[0];
@@ -197,13 +197,13 @@ window.onload = function() {
         isEng == 1 ? l.innerText = 'Eng' : l.innerText = 'Rus';
         let i = 0;
         let keys = document.querySelectorAll('#keyboard div');
+        let langKeys;
         isEng == 1 ? langKeys = engKeys : langKeys = rusKeys;
         keys.forEach((el) => {
           el.innerText = langKeys[i];
           i++;
         });
       }
-      leftAlt = false;
     }
     let element = document.querySelectorAll('div[data="' + `${event.keyCode}` + '"]');
     if (element.length == 1) {
