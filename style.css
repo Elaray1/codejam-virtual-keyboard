@@ -27,6 +27,8 @@ textarea {
   background-color: #3a424e;
   border-radius: 3px;
   color: white;
+  transition: all 0.2s ease;
+  cursor: pointer;
 }
 .clearfix {
   clear: both;
@@ -35,4 +37,12 @@ textarea {
 }
 .special-key {
   background: #1c232e;
+}
+.keypress {
+  background: #997a8d;
+  transition: all 0.2s ease;
+  border-radius: 40%;
+}
+p {
+  text-align: center;
 }
