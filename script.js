@@ -1,18 +1,20 @@
+import {keyboardKeys, engKeys, engKeysUpperCase, engKeysShift, rusKeys, rusKeysUpperCase, rusKeysShift, specialKeys, specialKeysWidth} from './keyboards.js';
+
 window.onload = function() {
   const textarea = '<div class="textarea"><textarea name="name" rows="8" cols="80" readonly></textarea></div>';
   const keyboard = '<div id="keyboard"></div>';
   const languageP = '<p class="language">Eng</p>';
-  const keyCombinationFistEl = ["ShiftLeft", "ControlLeft", "MetaLeft", "AltLeft"];
+  const keyCombinationFirstEl = ["ShiftLeft", "ControlLeft", "MetaLeft", "AltLeft"];
   const keyCombinationSecondEl = ["ShiftRight", "ControlRight", "MetaRight", "AltRight"];
   function specialKeysFunctionAdd(element, eventCode) {
-    if (keyCombinationFistEl.includes(eventCode)) {
+    if (keyCombinationFirstEl.includes(eventCode)) {
       element[0].classList.add('keypress');
     } else if (keyCombinationSecondEl.includes(eventCode)) {
       element[1].classList.add('keypress');
     }
   }
   function specialKeysFunctionRemove(element, eventCode) {
-    if (keyCombinationFistEl.includes(eventCode)) {
+    if (keyCombinationFirstEl.includes(eventCode)) {
       element[0].classList.remove('keypress');
     } else if (keyCombinationSecondEl.includes(eventCode)) {
       element[1].classList.remove('keypress');
@@ -48,6 +50,7 @@ window.onload = function() {
     });
   });
   let leftShift;
+  let leftAlt;
   let capsLock;
   const keys = document.querySelectorAll('#keyboard div');
   function keysContent(langKeys) {
@@ -60,6 +63,8 @@ window.onload = function() {
   function keydown(event) {
     if (event.code === 'ShiftLeft') {
       leftShift = true;
+    } else if (event.code === 'AltLeft') {
+      leftAlt = true;
     }
     let element = document.querySelectorAll('div[data="' + `${event.keyCode}` + '"]');
     if (element.length === 1) {
@@ -97,70 +102,70 @@ window.onload = function() {
   document.addEventListener('keydown', (event) => {
     keydown(event);
   });
-  document.getElementById('keyboard').childNodes.forEach((e) => {
-    e.addEventListener('mousedown', (event) => {
-      let element = document.querySelectorAll('div[data="' + `${event.target.getAttribute('data')}` + '"]');
-      if (element.length === 1) {
-        element = element[0];
-        element.classList.add('keypress');
-      } else {
-        element = event.target;
-        element.classList.add('keypress');
-      }
-    });
-  })
-  document.getElementById('keyboard').childNodes.forEach((e) => {
-    e.addEventListener('mouseup', (event) => {
-     let element = document.querySelectorAll('div[data="' + `${event.target.getAttribute('data')}` + '"]');
-     if (element.length === 1) {
-       element = element[0];
-       element.classList.remove('keypress');
-       switch (element.innerText) {
-         case 'Backspace':
-           output = output.substr(0, output.length-1);
-           break;
-         case 'Enter':
-           output += '\n';
-           break;
-         case '':
-           output += ' ';
-           break;
-         case 'Tab':
-           output += '\t';
-           break;
-         case 'Caps Lock':
-           output += '';
-           break;
-         default:
-         output += element.innerText;
-       }
-       document.querySelector('textarea').value = output;
-     } else {
-       element = event.target;
-       element.classList.remove('keypress');
-     }
-     let keyCode = event.target.getAttribute('data');
-     if (keyCode === 20) { //Caps Lock
-       capsLock = !capsLock;
-       let langKeys = isEng === 1 ? engKeysUpperCase : rusKeysUpperCase;
-
-       if (capsLock) {
-         element.classList.add('keypress');
-         keysContent(langKeys);
-       } else {
-         langKeys = isEng === '1' ? engKeys : rusKeys;
-         element.classList.remove('keypress');
-         keysContent(langKeys);
-       }
-     }
-   });
+  document.addEventListener('mousedown', (e) => {
+    let element = e.target;
+    if (element.parentNode != document.getElementById('keyboard')) return;
+    element.classList.add('keypress');
   });
+  document.addEventListener('mouseup', (e) => {
+    let element = e.target;
+    if (element.parentNode != document.getElementById('keyboard')) return;
+    element.classList.remove('keypress');
+    switch (element.innerText) {
+      case 'Backspace':
+        output = output.substr(0, output.length-1);
+        break;
+      case 'Enter':
+        output += '\n';
+        break;
+      case '':
+        output += ' ';
+        break;
+      case 'Tab':
+        output += '\t';
+        break;
+      case 'Caps Lock':
+        output += '';
+        break;
+      case 'Win':
+        return;
+      case 'Alt':
+        return;
+      case 'Shift':
+        return;
+      case 'Ctrl':
+        return;
+      default:
+      output += element.innerText;
+    }
+    document.querySelector('textarea').value = output;
+    let keyCode = event.target.getAttribute('data');
+    if (keyCode === 20) { //Caps Lock
+      capsLock = !capsLock;
+      let langKeys = isEng === 1 ? engKeysUpperCase : rusKeysUpperCase;
 
+      if (capsLock) {
+        element.classList.add('keypress');
+        keysContent(langKeys);
+      } else {
+        langKeys = isEng === '1' ? engKeys : rusKeys;
+        element.classList.remove('keypress');
+        keysContent(langKeys);
+      }
+    }
+  });
   document.addEventListener('keyup', function(event) {
     if (event.code === 'ShiftLeft') {
       leftShift = false;
-    }
-    else if (event.code === 'AltLeft') {
+      if (leftAlt) {
+        isEng = isEng === '1' ? '0' : '1';
+        languageHtml.innerText = isEng === '1' ? 'Eng' : 'Rus';
+        let langKeys;
+        isEng === '1' ? langKeys = engKeys : langKeys = rusKeys;
+        keysContent(langKeys);
+      }
+    } else if (event.code === 'AltLeft') {
+      leftAlt = false;
       if (leftShift) {
         isEng = isEng === '1' ? '0' : '1';
         languageHtml.innerText = isEng === '1' ? 'Eng' : 'Rus';

@@ -1,1 +1,5 @@
 # codejam-virtual-keyboard
+`npm ci` to install all necessary files;
+`http-server` to run the server;
+
+**Then you need to go on http://192.168.0.105:8080/index.html or http://127.0.0.1:8080/index.html**
