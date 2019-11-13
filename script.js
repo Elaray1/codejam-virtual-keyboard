@@ -6,21 +6,21 @@ window.onload = function() {
   const languageP = '<p class="language">Eng</p>';
   const keyCombinationFirstEl = ["ShiftLeft", "ControlLeft", "MetaLeft", "AltLeft"];
   const keyCombinationSecondEl = ["ShiftRight", "ControlRight", "MetaRight", "AltRight"];
-  function specialKeysFunctionAdd(element, eventCode) {
+  const specialKeysFunctionAdd = (element, eventCode) => {
     if (keyCombinationFirstEl.includes(eventCode)) {
       element[0].classList.add('keypress');
     } else if (keyCombinationSecondEl.includes(eventCode)) {
       element[1].classList.add('keypress');
     }
   }
-  function specialKeysFunctionRemove(element, eventCode) {
+  const specialKeysFunctionRemove = (element, eventCode) => {
     if (keyCombinationFirstEl.includes(eventCode)) {
       element[0].classList.remove('keypress');
     } else if (keyCombinationSecondEl.includes(eventCode)) {
       element[1].classList.remove('keypress');
     }
   }
-  let isEng = localStorage.getItem('isEng');
+  let isEng = Number(localStorage.getItem('isEng'));
   const body = document.querySelector('body');
   let output = '';
   body.insertAdjacentHTML('afterbegin', keyboard);
@@ -28,10 +28,9 @@ window.onload = function() {
   body.insertAdjacentHTML('afterbegin', textarea);
   const languageHtml = document.querySelector('.language');
   let initKeyboad = () => {
-    let langKeys;
-    isEng === '1' ? langKeys = engKeys : langKeys = rusKeys;
-    isEng === '1' ? languageHtml.innerText = 'Eng' : languageHtml.innerText = 'Rus';
-    let i= 0;
+    const langKeys = isEng === 1 ? engKeys : rusKeys;
+    languageHtml.innerText = isEng === 1 ? 'Eng' : 'Rus';
+    let i = 0;
     let keyValue = '';
     keyboardKeys.forEach((el) => {
       keyValue += `<div class="key-def" data=` + el + `>${langKeys[i]}</div>`;
@@ -53,14 +52,14 @@ window.onload = function() {
   let leftAlt;
   let capsLock;
   const keys = document.querySelectorAll('#keyboard div');
-  function keysContent(langKeys) {
+  const keysContent = (langKeys) => {
     let i = 0;
     keys.forEach((el) => {
       el.innerText = langKeys[i];
       i++;
     });
   }
-  function keydown(event) {
+  const keydown = (event) => {
     if (event.code === 'ShiftLeft') {
       leftShift = true;
     } else if (event.code === 'AltLeft') {
@@ -93,8 +92,8 @@ window.onload = function() {
     } else {
       specialKeysFunctionAdd(element, event.code);
     }
-    if (event.keyCode === 16) { //Shift
-      let langKeys = isEng === '1' ? engKeysShift : rusKeysShift;
+    if (event.keyCode === 16) { //16 is keyCode of Shift
+      const langKeys = isEng === 1 ? engKeysShift : rusKeysShift;
       keysContent(langKeys);
     }
   }
@@ -103,12 +102,12 @@ window.onload = function() {
     keydown(event);
   });
   document.addEventListener('mousedown', (e) => {
-    let element = e.target;
+    const element = e.target;
     if (element.parentNode != document.getElementById('keyboard')) return;
     element.classList.add('keypress');
   });
   document.addEventListener('mouseup', (e) => {
-    let element = e.target;
+    const element = e.target;
     if (element.parentNode != document.getElementById('keyboard')) return;
     element.classList.remove('keypress');
     switch (element.innerText) {
@@ -139,38 +138,35 @@ window.onload = function() {
       output += element.innerText;
     }
     document.querySelector('textarea').value = output;
-    let keyCode = event.target.getAttribute('data');
+    const keyCode = event.target.getAttribute('data');
     if (keyCode === 20) { //Caps Lock
       capsLock = !capsLock;
       let langKeys = isEng === 1 ? engKeysUpperCase : rusKeysUpperCase;
-
       if (capsLock) {
         element.classList.add('keypress');
         keysContent(langKeys);
       } else {
-        langKeys = isEng === '1' ? engKeys : rusKeys;
+        langKeys = isEng === 1 ? engKeys : rusKeys;
         element.classList.remove('keypress');
         keysContent(langKeys);
       }
     }
   });
-  document.addEventListener('keyup', function(event) {
+  document.addEventListener('keyup', (event) => {
     if (event.code === 'ShiftLeft') {
       leftShift = false;
       if (leftAlt) {
-        isEng = isEng === '1' ? '0' : '1';
-        languageHtml.innerText = isEng === '1' ? 'Eng' : 'Rus';
-        let langKeys;
-        isEng === '1' ? langKeys = engKeys : langKeys = rusKeys;
+        isEng = Number(!isEng);
+        languageHtml.innerText = isEng === 1 ? 'Eng' : 'Rus';
+        const langKeys = isEng === 1 ? engKeys : rusKeys;
         keysContent(langKeys);
       }
     } else if (event.code === 'AltLeft') {
       leftAlt = false;
       if (leftShift) {
-        isEng = isEng === '1' ? '0' : '1';
-        languageHtml.innerText = isEng === '1' ? 'Eng' : 'Rus';
-        let langKeys;
-        isEng === '1' ? langKeys = engKeys : langKeys = rusKeys;
+        isEng = Number(!isEng);
+        languageHtml.innerText = isEng === 1 ? 'Eng' : 'Rus';
+        const langKeys = isEng === 1 ? engKeys : rusKeys;
         keysContent(langKeys);
       }
     }
@@ -181,19 +177,19 @@ window.onload = function() {
     } else {
       specialKeysFunctionRemove(element, event.code);
     }
-    if (event.keyCode === 20) { //Caps Lock
-      let langKeys = isEng === '1' ? engKeysUpperCase : rusKeysUpperCase;
+    if (event.keyCode === 20) { //20 is keyCode of Caps Lock
+      let langKeys = isEng === 1 ? engKeysUpperCase : rusKeysUpperCase;
       capsLock = event.getModifierState && event.getModifierState('CapsLock');
       if (capsLock) {
         element.classList.add('keypress');
         keysContent(langKeys);
       } else {
-        langKeys = isEng === '1' ? engKeys : rusKeys;
+        langKeys = isEng === 1 ? engKeys : rusKeys;
         element.classList.remove('keypress');
         keysContent(langKeys);
       }
-    } else if (event.keyCode === 16) { //Shift
-          let langKeys = isEng === '1' ? engKeys : rusKeys;
+    } else if (event.keyCode === 16) { //16 is keyCode of Shift
+          const langKeys = isEng === 1 ? engKeys : rusKeys;
           keysContent(langKeys);
         }
   });
