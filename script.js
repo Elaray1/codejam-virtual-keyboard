@@ -115,17 +115,23 @@ window.onload = function() {
      if (element.length === 1) {
        element = element[0];
        element.classList.remove('keypress');
-       if (element.innerText === 'Backspace') {
-         output = output.substr(0, output.length-1);
-       } else if (element.innerText === 'Enter') {
-         output += '\n';
-       } else if (element.innerText === '') {
-         output += ' ';
-       } else if (element.innerText === 'Tab') {
-         output += '   ';
-       } else if (element.innerText === 'Caps Lock') {
-         output += '';
-       } else {
+       switch (element.innerText) {
+         case 'Backspace':
+           output = output.substr(0, output.length-1);
+           break;
+         case 'Enter':
+           output += '\n';
+           break;
+         case '':
+           output += ' ';
+           break;
+         case 'Tab':
+           output += '\t';
+           break;
+         case 'Caps Lock':
+           output += '';
+           break;
+         default:
          output += element.innerText;
        }
        document.querySelector('textarea').value = output;
